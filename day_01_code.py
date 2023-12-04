@@ -1,5 +1,5 @@
 class FirstAndLast:
-    def reading(file):
+    def reading(self, file):
         answer = 0
         for line in file:
             nums = []
