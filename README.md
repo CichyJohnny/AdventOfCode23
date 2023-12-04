@@ -1,5 +1,6 @@
 # AdventOfCode23
-Tasks made for every day in Advent of Code, 2023 edition.
+Tasks made for every day in Advent of Code, 2023 edition. 
+
 https://adventofcode.com/2023
 
 ## Task are solved in quite complex way
