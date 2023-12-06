@@ -1,8 +1,11 @@
 from day_02_code import Games
 
 # In day_02_input.txt put your unique input
-file = open('day_02_input.txt', 'r')
+input = 'day_02_input.txt'
 
-answer = Games().start(file)
+# In day_02_output.json will be stored JSON output
+output = 'day_02_output.json'
+
+answer = Games(input, output).start()
 
 print(answer)

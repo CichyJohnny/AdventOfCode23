@@ -1,17 +1,20 @@
-import re, json, os.path
+import re
+import json
+import os.path
+
 
 class Games:
-    def __init__(self):
-        self.data_file = 'day_02_output.json'
+    def __init__(self, input, output):
+        self.data_file = output
+        self.input = open(input, 'r')
         self.data = self.load_json()
         self.answer = 0
 
-
-    def start(self, input):
-        self.iterate(input)
+    def start(self):
+        self.iterate()
         self.save_json()
         self.check()
-        self.result()
+        return self.result()
 
     def load_json(self):
         if os.path.exists(self.data_file):
@@ -27,9 +30,9 @@ class Games:
         with open(self.data_file, 'w') as file:
             json.dump(self.data, file, indent=4)
 
-    def iterate(self, file):
+    def iterate(self):
 
-        for line in file:
+        for line in self.input:
             text = line.strip()
             sep = re.split(': |; ', text)
             sets = sep[1:]
@@ -53,20 +56,18 @@ class Games:
             for set in self.data[game]:
 
                 for color in self.data[game][set].items():
+
                     if color[0] == 'red' and color[1] > 12:
-                        print(color)
                         var = False
+
                     if color[0] == 'green' and color[1] > 13:
-                        print(color)
                         var = False
+
                     if color[0] == 'blue' and color[1] > 14:
-                        print(color)
                         var = False
 
             if var:
                 self.answer += int(game)
-                print(game)
-        print(self.answer)
 
     def result(self):
         answer = self.answer
