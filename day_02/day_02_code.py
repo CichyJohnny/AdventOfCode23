@@ -1,8 +1,5 @@
 import re, json, os.path
 
-input = open('day_02_input.txt', 'r')
-
-
 class Games:
     def __init__(self):
         self.data_file = 'day_02_output.json'
