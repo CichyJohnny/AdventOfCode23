@@ -1,12 +1,11 @@
 import json
-import os.path
 
 
 class Cards:
     def __init__(self, input, output):
         self.data_file = output
         self.input = open(input, 'r')
-        self.data = self.load_json()
+        self.data = {}
         self.last = 0
         self.answer = 0
 
@@ -15,16 +14,6 @@ class Cards:
         self.calculate()
         self.save_json()
         return self.result()
-
-    def load_json(self):
-        if os.path.exists(self.data_file):
-
-            with open(self.data_file, 'r') as file:
-                data = json.load(file)
-
-            return data
-
-        return {}
 
     def save_json(self):
         with open(self.data_file, 'w') as file:

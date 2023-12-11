@@ -1,13 +1,12 @@
 import re
 import json
-import os.path
 
 
 class Games:
     def __init__(self, input, output):
         self.data_file = output
         self.input = open(input, 'r')
-        self.data = self.load_json()
+        self.data = {}
         self.answer = 0
 
     def start(self):
@@ -15,16 +14,6 @@ class Games:
         self.save_json()
         self.check()
         return self.result()
-
-    def load_json(self):
-        if os.path.exists(self.data_file):
-
-            with open(self.data_file, 'r') as file:
-                data = json.load(file)
-
-            return data
-
-        return {}
 
     def save_json(self):
         with open(self.data_file, 'w') as file:
