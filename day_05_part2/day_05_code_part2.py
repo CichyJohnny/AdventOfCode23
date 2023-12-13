@@ -1,3 +1,8 @@
+# Current solution uses brute force
+# Solution may require using binary search, backward mapping or other algorithm
+# But I failed in applying them
+
+
 import json
 import re
 
@@ -44,17 +49,14 @@ class Garden:
 
     def calculate(self):
         data = self.data
+        ranges = list(map(int, data['seeds']))
 
-        i = 0
-        seeds = data['seeds']
+        for i in range(0, len(ranges), 2):
+            first = ranges[i]
+            last = ranges[i] + ranges[i + 1]
 
-        while i < len(seeds):
-            begin = int(seeds[i])
-            end = begin + int(seeds[i + 1])
-            i += 2
-
-            for seed in range(begin, end):
-                x = int(seed)
+            for val in range(first, last):
+                x = int(val)
 
                 for step in data['steps']:
 
@@ -62,11 +64,11 @@ class Garden:
                         source = x >= r[1] and x < r[1] + r[2]
 
                         if source:
-                            destination = x + r[0] - r[1]
-                            x = destination
+                            destination = r[0] - r[1]
+                            x = x + destination
                             break
 
-                self.answer = min(x, self.answer)
+                self.answer = min(self.answer, x)
 
     def result(self):
         answer = self.answer
