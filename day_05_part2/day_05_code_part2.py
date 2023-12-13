@@ -45,20 +45,28 @@ class Garden:
     def calculate(self):
         data = self.data
 
-        for seed in data['seeds']:
-            x = int(seed)
+        i = 0
+        seeds = data['seeds']
 
-            for step in data['steps']:
+        while i < len(seeds):
+            begin = int(seeds[i])
+            end = begin + int(seeds[i + 1])
+            i += 2
 
-                for r in step:
-                    source = x >= r[1] and x < r[1] + r[2]
+            for seed in range(begin, end):
+                x = int(seed)
 
-                    if source:
-                        destination = x + r[0] - r[1]
-                        x = destination
-                        break
+                for step in data['steps']:
 
-            self.answer = min(x, self.answer)
+                    for r in step:
+                        source = x >= r[1] and x < r[1] + r[2]
+
+                        if source:
+                            destination = x + r[0] - r[1]
+                            x = destination
+                            break
+
+                self.answer = min(x, self.answer)
 
     def result(self):
         answer = self.answer
