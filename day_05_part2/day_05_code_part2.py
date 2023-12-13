@@ -1,8 +1,3 @@
-# Current solution uses brute force
-# Solution may require using binary search, backward mapping or other algorithm
-# But I failed in applying them
-
-
 import json
 import re
 
