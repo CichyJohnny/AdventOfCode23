@@ -2,7 +2,7 @@ import json
 from collections import Counter
 
 
-class Race:
+class Cards:
     def __init__(self, input, output):
         self.data_file = output
         self.input = open(input, 'r')
