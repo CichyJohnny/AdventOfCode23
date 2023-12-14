@@ -63,9 +63,6 @@ class Race:
                     elif max(val) == 2:
                         data[num + 1]['order'] = max(1, data[num + 1]['order'])
 
-                    else:
-                        data[num + 1]['order'] = 0
-
             else:
                 val = Counter(cards).values()
 
