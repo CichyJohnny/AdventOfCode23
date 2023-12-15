@@ -2,7 +2,7 @@ import json
 import re
 
 
-class Race:
+class Maps:
     def __init__(self, input, output):
         self.data_file = output
         self.input = open(input, 'r')
