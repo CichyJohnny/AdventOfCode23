@@ -38,24 +38,38 @@ class Maps:
 
     def solve(self):
         data = self.data
-        current = 'AAA'
-        goal = 'ZZZ'
+        current = []
+        for key in data['nodes'].keys():
+            if key[-1] == 'A':
+                current.append(key)
 
         i = 0
-        while current != goal:
+        var = True
+        while var:
+            for key in current:
+
+                if key[-1] == 'Z':
+                    continue
+
+                else:
+                    break
+            else:
+                var = False
+
             curr_order = i % len(self.order)
             direction = self.order[curr_order]
-
             if direction == 'L':
                 direction = 0
 
             else:
                 direction = 1
 
-            current = data['nodes'][current][direction]
+            print(f'proba {i}', direction, current, self.order)
+            for j in range(len(current)):
+                current[j] = data['nodes'][current[j]][direction]
             i += 1
         else:
-            self.answer = i
+            self.answer = i - 1
 
     def result(self):
 
