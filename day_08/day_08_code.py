@@ -27,13 +27,16 @@ class Maps:
 
         num = 1
         for line in self.input:
+
             if num == 1:
                 self.order = list(line.strip())
                 data['order'] = self.order
+
             elif num > 2:
                 line = line.strip()
                 sep = re.split(r'[, =()]', line)
                 data['nodes'][sep[0]] = [sep[4], sep[6]]
+
             num += 1
 
     def solve(self):
@@ -54,6 +57,7 @@ class Maps:
 
             current = data['nodes'][current][direction]
             i += 1
+
         else:
             self.answer = i
 
