@@ -1,5 +1,6 @@
 import json
 import re
+import math
 
 
 class Maps:
@@ -27,49 +28,48 @@ class Maps:
 
         num = 1
         for line in self.input:
+
             if num == 1:
                 self.order = list(line.strip())
                 data['order'] = self.order
+
             elif num > 2:
                 line = line.strip()
                 sep = re.split(r'[, =()]', line)
                 data['nodes'][sep[0]] = [sep[4], sep[6]]
+
             num += 1
 
     def solve(self):
         data = self.data
         current = []
+
         for key in data['nodes'].keys():
             if key[-1] == 'A':
                 current.append(key)
 
+        next_z = [self.mapa(x) for x in current]
+        self.answer = math.lcm(*next_z)
+
+    def mapa(self, current):
+        data = self.data
         i = 0
-        var = True
-        while var:
-            for key in current:
 
-                if key[-1] == 'Z':
-                    continue
-
-                else:
-                    break
-            else:
-                var = False
-
+        while current[-1] != 'Z':
             curr_order = i % len(self.order)
             direction = self.order[curr_order]
+
             if direction == 'L':
                 direction = 0
 
             else:
                 direction = 1
 
-            print(f'proba {i}', direction, current, self.order)
-            for j in range(len(current)):
-                current[j] = data['nodes'][current[j]][direction]
+            current = data['nodes'][current][direction]
             i += 1
         else:
-            self.answer = i - 1
+            answer = i
+            return answer
 
     def result(self):
 
