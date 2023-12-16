@@ -8,9 +8,12 @@ class Garden:
         self.input = open(input, 'r')
         self.data = {}
         self.answer = float('inf')
+        self.perc = 0
 
     def start(self):
         self.iterate()
+        for i in range(0, len(self.data['seeds']), 2):
+            self.perc += int(self.data['seeds'][i+1])
         self.calculate()
         self.save_json()
         return self.result()
@@ -46,11 +49,14 @@ class Garden:
         data = self.data
         ranges = list(map(int, data['seeds']))
 
+        num = 0
         for i in range(0, len(ranges), 2):
             first = ranges[i]
             last = ranges[i] + ranges[i + 1]
 
             for val in range(first, last):
+                print(f'{num / self.perc * 100}%')
+                num += 1
                 x = int(val)
 
                 for step in data['steps']:
