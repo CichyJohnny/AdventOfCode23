@@ -1,26 +1,17 @@
 import sys
+sys.setrecursionlimit(100000)
 
 
-sys.setrecursionlimit(1000000)
 class Maze:
-    def __init__(self, input, output):
-        self.data_file = output
+    def __init__(self, input):
         self.input = open(input, 'r')
         self.data = []
         self.max = 0
-        self.answer = 0
 
     def start(self):
         self.iterate()
-        self.findentry()
-        self.save()
-        print(self.data)
+        self.find_entry()
         return self.result()
-
-    def save(self):
-        with open(self.data_file, 'w') as file:
-            for i in range(len(self.data)):
-                file.write(''.join(self.data[i]) + '\n')
 
     def iterate(self):
         data = self.data
@@ -28,9 +19,8 @@ class Maze:
         for line in self.input:
             line = line.strip()
             data.append(list(line))
-        print(data)
 
-    def findentry(self):
+    def find_entry(self):
         data = self.data
         height, width = len(data), len(data[0])
 
@@ -39,90 +29,99 @@ class Maze:
             for j in range(width):
 
                 if data[i][j] == 'S':
-                    self.firstmaploop(i, j)
+                    self.first_map_loop(i, j)
                     break
 
-
-    def firstmaploop(self, i, j):
+    def first_map_loop(self, i, j):
         data = self.data
-        height, width = len(data), len(data[0])
-        sml = self.secondmaploop
+        sml = self.second_map_loop
 
-        if i > 0:
-            if data[i - 1][j] == '|':
-                sml(i - 1, j, '| up')
-            elif data[i - 1][j] == '7':
-                sml(i - 1, j, '7 up')
-            elif data[i - 1][j] == 'F':
-                sml(i - 1, j, 'F up')
+        if data[i - 1][j] == '|':
+            sml(i - 1, j, '| up')
 
-        if i < height - 1:
-            if data[i + 1][j] == '|':
-                sml(i + 1, j, '| down')
-            elif data[i + 1][j] == 'L':
-                sml(i + 1, j, 'L down')
-            elif data[i + 1][j] == 'J':
-                sml(i + 1, j, 'J down')
+        elif data[i - 1][j] == '7':
+            sml(i - 1, j, '7 up')
 
+        elif data[i - 1][j] == 'F':
+            sml(i - 1, j, 'F up')
 
-        if j > 0:
-            if data[i][j - 1] == '-':
-                sml(i, j - 1, '- left')
-            elif data[i][j - 1] == 'F':
-                sml(i, j - 1, 'F down')
-            elif data[i][j - 1] == 'L':
-                sml(i, j - 1, 'L up')
+        elif data[i + 1][j] == '|':
+            sml(i + 1, j, '| down')
 
-        if j < width - 1:
-            if data[i][j + 1] == '-':
-                sml(i, j + 1, '- right')
-            elif data[i][j + 1] == 'J':
-                sml(i, j + 1, 'J up')
-            elif data[i][j + 1] == '7':
-                sml(i, j + 1, '7 down')
+        elif data[i + 1][j] == 'L':
+            sml(i + 1, j, 'L down')
 
-    def secondmaploop(self, i, j, lastsymbol, index=0):
+        elif data[i + 1][j] == 'J':
+            sml(i + 1, j, 'J down')
+
+        elif data[i][j - 1] == '-':
+            sml(i, j - 1, '- left')
+
+        elif data[i][j - 1] == 'F':
+            sml(i, j - 1, 'F down')
+
+        elif data[i][j - 1] == 'L':
+            sml(i, j - 1, 'L up')
+
+        elif data[i][j + 1] == '-':
+            sml(i, j + 1, '- right')
+
+        elif data[i][j + 1] == 'J':
+            sml(i, j + 1, 'J up')
+
+        elif data[i][j + 1] == '7':
+            sml(i, j + 1, '7 down')
+
+    def second_map_loop(self, i, j, last_symbol, index=0):
         data = self.data
+        sml = self.second_map_loop
+
         index += 1
+        self.max = max(index, self.max)
+
         data[i][j] = str(index)
-        sml = self.secondmaploop
 
-
-
-
-        if lastsymbol == '| up' or lastsymbol == 'J up' or lastsymbol == 'L up':
+        if last_symbol == '| up' or last_symbol == 'J up' or last_symbol == 'L up':
             if data[i - 1][j] == '|':
                 sml(i - 1, j, '| up', index=index)
+
             elif data[i-1][j] == '7':
                 sml(i - 1, j, '7 up', index=index)
+
             elif data[i-1][j] == 'F':
                 sml(i - 1, j, 'F up', index=index)
 
-        elif lastsymbol == '| down' or lastsymbol == 'F down' or lastsymbol == '7 down':
+        elif last_symbol == '| down' or last_symbol == 'F down' or last_symbol == '7 down':
             if data[i + 1][j] == '|':
                 sml(i + 1, j, '| down', index=index)
+
             elif data[i + 1][j] == 'J':
                 sml(i + 1, j, 'J down', index=index)
+
             elif data[i + 1][j] == 'L':
                 sml(i + 1, j, 'L down', index=index)
 
-        elif lastsymbol == '- left' or lastsymbol == '7 up' or lastsymbol == 'J down':
+        elif last_symbol == '- left' or last_symbol == '7 up' or last_symbol == 'J down':
             if data[i][j - 1] == '-':
                 sml(i, j - 1, '- left', index=index)
+
             elif data[i][j - 1] == 'L':
                 sml(i, j - 1, 'L up', index=index)
+
             elif data[i][j - 1] == 'F':
                 sml(i, j - 1, 'F down', index=index)
 
-        elif lastsymbol == '- right' or lastsymbol == 'F up' or lastsymbol == 'L down':
+        elif last_symbol == '- right' or last_symbol == 'F up' or last_symbol == 'L down':
             if data[i][j + 1] == '-':
                 sml(i, j + 1, '- right', index=index)
+
             elif data[i][j + 1] == 'J':
                 sml(i, j + 1, 'J up', index=index)
+
             elif data[i][j + 1] == '7':
                 sml(i, j + 1, '7 down', index=index)
 
-
     def result(self):
+        answer = self.max // 2 + 1
 
-        return self.answer
+        return answer
