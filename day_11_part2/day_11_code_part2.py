@@ -79,7 +79,7 @@ class Maze:
 
                     for new_rows in self.x_cords:
                         if x1 < new_rows < x2 or x2 < new_rows < x1:
-                            new_x += 1000000 - 1  # I don't know why it work only for n - 1
+                            new_x += 1000000 - 1
 
                     for new_cols in self.y_cords:
                         if y1 < new_cols < y2 or y2 < new_cols < y1:
