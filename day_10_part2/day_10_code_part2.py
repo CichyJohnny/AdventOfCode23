@@ -154,7 +154,7 @@ class Maze:
             area -= loop[j][0] * loop[i][1]
 
         area = abs(area) // 2
-        self.answer = area - n // 2 + 1
+        self.answer = area - (n // 2 + 1)
 
     def result(self):
         answer = self.answer
