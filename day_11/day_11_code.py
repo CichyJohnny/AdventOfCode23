@@ -12,16 +12,8 @@ class Maze:
         self.iterate()
         self.find_hashtags()
         self.calculate()
-        self.save()
 
         return self.answer
-
-    def save(self):
-        data = self.data
-
-        with open('day_11_output.txt', 'w') as f:
-            for line in data:
-                f.write(''.join(line) + '\n')
 
     def iterate(self):
         data = self.data
