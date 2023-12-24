@@ -2,7 +2,7 @@
 import numpy as np
 
 
-class Maze:
+class GalaxyDistance:
     def __init__(self, input):
         self.input = open(input, 'r')
         self.data = []
