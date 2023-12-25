@@ -1,67 +1,107 @@
-import numpy as np
-
-
-class Maze:
+class HotSprings:
     def __init__(self, input):
         self.input = open(input, 'r')
-        self.data = []
-        self.hash = {}
+        self.data = {}
         self.answer = 0
 
     def start(self):
         self.iterate()
-        self.find_hashtags()
-        self.calculate()
+        self.solve()
 
         return self.answer
 
     def iterate(self):
         data = self.data
 
+        i = 0
         for line in self.input:
-            line = line.strip()
-            line = list(line)
-            data.append(line)
+            line = line.strip().split()
+            data[i] = [line[0], line[1].split(',')]
+            i += 1
 
-            if len(line) == line.count('.'):
-                data.append(line)
-
-        data = np.transpose(data).tolist()
-        new_data = []
-
-        for line in data:
-            new_data.append(line)
-
-            if len(line) == line.count('.'):
-                new_data.append(line)
-
-        data = np.transpose(new_data).tolist()
-        self.data = data
-
-    def find_hashtags(self):
+    def solve(self):
         data = self.data
-        height = len(data)
-        width = len(data[0])
 
-        index = 1
-        for row in range(height):
+        for line in data.values():
+            string = line[0]
+            string += '.'
 
-            for col in range(width):
+            search_values = [int(i) for i in line[1]]
+            search_values.append(0)
 
-                if data[row][col] == '#':
-                    data[row][col] = str(index)
-                    self.hash[index] = (row, col)
-                    index += 1
+            n = len(string)
+            m = len(search_values)
+            m_max = max(search_values)
 
-    def calculate(self):
-        hash = self.hash
-        max_index = max(hash.keys())
+            dp = [[[None for _ in range(m_max + 1)] for _ in range(m)] for _ in range(n)]
 
-        for first in range(1, max_index + 1):
+            for i in range(n):
+                x = string[i]
 
-            for second in range(first, max_index + 1):
+                for j in range(m):
 
-                if first != second:
-                    x = abs(hash[first][0] - hash[second][0])
-                    y = abs(hash[first][1] - hash[second][1])
-                    self.answer += x + y
+                    for k in range(search_values[j] + 1):
+
+                        if i == 0:
+
+                            if j != 0:
+                                dp[i][j][k] = 0
+                                continue
+
+                            if x == '#':
+                                if k != 1:
+                                    dp[i][j][k] = 0
+
+                                else:
+                                    dp[i][j][k] = 1
+
+                                continue
+
+                            if x == '.':
+                                if k != 0:
+                                    dp[i][j][k] = 0
+                                else:
+                                    dp[i][j][k] = 1
+
+                                continue
+
+                            if x == '?':
+                                if k not in [0, 1]:
+                                    dp[i][j][k] = 0
+
+                                else:
+                                    dp[i][j][k] = 1
+
+                                continue
+
+                        if k != 0:
+                            ans_dot = 0
+
+                        elif j > 0:
+                            assert k == 0
+                            ans_dot = dp[i-1][j-1][search_values[j-1]]
+                            ans_dot += dp[i-1][j][0]
+
+                        else:
+                            if string[:i].count('#') == 0:
+                                ans_dot = 1
+
+                            else:
+                                ans_dot = 0
+
+                        if k == 0:
+                            ans_pound = 0
+
+                        else:
+                            ans_pound = dp[i-1][j][k-1]
+
+                        if x == '.':
+                            dp[i][j][k] = ans_dot
+
+                        elif x == '#':
+                            dp[i][j][k] = ans_pound
+
+                        else:
+                            dp[i][j][k] = ans_dot + ans_pound
+
+            self.answer += dp[-1][-1][0]
