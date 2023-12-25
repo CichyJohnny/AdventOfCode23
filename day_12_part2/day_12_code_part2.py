@@ -53,6 +53,7 @@ class HotSprings:
 
                             if j != 0:
                                 dp[i][j][k] = 0
+
                                 continue
 
                             if x == '#':
@@ -85,7 +86,6 @@ class HotSprings:
                             ans_dot = 0
 
                         elif j > 0:
-                            assert k == 0
                             ans_dot = dp[i-1][j-1][search_values[j-1]]
                             ans_dot += dp[i-1][j][0]
 
