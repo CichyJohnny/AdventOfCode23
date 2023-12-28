@@ -3,7 +3,7 @@ import sys
 sys.setrecursionlimit(10**6)
 
 
-class LaserBeams:
+class MinTrack:
     def __init__(self, input):
         self.input = open(input, 'r')
         self.data = []
