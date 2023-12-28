@@ -16,7 +16,7 @@ class FindMinPath:
 
     def iterate(self):
         data = {(i, j): int(value)
-                for i, string in enumerate(open('day_17_input_part2.txt'))
+                for i, string in enumerate(self.input)
                 for j, value in enumerate(string.strip())}
         self.data = data
 
