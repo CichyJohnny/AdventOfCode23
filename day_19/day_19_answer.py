@@ -1,8 +1,8 @@
-from day_18_code import Digging
+from day_19_code import Workflow
 
-# In day_18_input.txt put your unique input
-input = 'day_18_input.txt'
+# In day_19_input.txt put your unique input
+input = 'day_19_input.txt'
 
-answer = Digging(input).start()
+answer = Workflow(input).start()
 
 print(answer)

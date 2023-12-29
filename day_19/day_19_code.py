@@ -1,53 +1,99 @@
-class Digging:
+import re
+
+
+class Workflow:
     def __init__(self, input):
         self.input = open(input, 'r')
-        self.data = {}
-        self.answer = 0
+        self.flow = {}
+        self.ratings = {}
+        self.As = []
+        self.Rs = []
 
     def start(self):
         self.iterate()
-        self.count_enclosed_tiles()
+        self.solve()
 
-        return self.answer
+        return self.result()
 
     def iterate(self):
-        data = self.data
+        flow = self.flow
+        flow_list = []
 
-        loc = (0, 0)
+        ratings = self.ratings
+        ratings_list = []
+
+        var = True
         for line in self.input:
-            line = line.split()
+            line = line.strip()
 
-            steps = int(line[1])
-            direction = line[0]
+            if len(line) == 0:
+                var = False
+                continue
 
-            data[loc] = line[2]
+            if var:
+                flow_list.append(line)
 
-            if direction == 'R':
-                loc = (loc[0], loc[1] + steps)
+            else:
+                ratings_list.append(line)
 
-            elif direction == 'L':
-                loc = (loc[0], loc[1] - steps)
+        for x in flow_list:
+            x = re.split('{|}', x)[:-1]
+            name = x[0]
+            flow[name] = {}
 
-            elif direction == 'U':
-                loc = (loc[0] - steps, loc[1])
+            conditions = x[1].split(',')
 
-            elif direction == 'D':
-                loc = (loc[0] + steps, loc[1])
+            for i in conditions:
+                i = i.split(':')
 
-    def count_enclosed_tiles(self):
-        loop = list(self.data.keys())
+                if len(i) == 2:
+                    flow[name][i[0]] = i[1]
 
-        area = 0
-        n = len(loop)
+                elif len(i) == 1:
+                    flow[name]['True'] = i[0]
 
-        length = 0
-        for i in range(n):
-            j = (i + 1) % n  # Next tuple inside loop
+        i = 0
+        for x in ratings_list:
+            x = x[1:-1].split(',')
+            ratings[i] = []
 
-            length += abs(loop[i][0] - loop[j][0]) + abs(loop[i][1] - loop[j][1])
-            area += loop[i][0] * loop[j][1]
-            area -= loop[j][0] * loop[i][1]
+            for val in x:
+                val = val.split('=')
+                ratings[i].append(val[1])
 
-        area = abs(area) // 2
+            i += 1
 
-        self.answer = area + length // 2 + 1
+    def solve(self):
+        flow = self.flow
+        ratings = self.ratings
+
+        for rating in ratings.values():
+            rating = list(map(int, rating))
+            x, m, a, s = rating
+
+            destination = 'in'
+            while True:
+
+                if destination == 'A':
+                    self.As.append(rating)
+                    break
+
+                elif destination == 'R':
+                    self.Rs.append(rating)
+                    break
+
+                conditions = flow[destination]
+
+                for expression, direction in conditions.items():
+
+                    if eval(expression, {'x': x, 'm': m, 'a': a, 's': s}):
+                        destination = direction
+                        break
+
+    def result(self):
+        answer = 0
+
+        for x in self.As:
+            answer += sum(x)
+
+        return answer
