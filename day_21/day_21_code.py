@@ -6,8 +6,7 @@ class Garden:
 
     def start(self):
         self.iterate()
-        self.make_n_steps(64)
-        self.result()
+        self.step(64)
 
         return self.answer
 
@@ -23,11 +22,7 @@ class Garden:
                 if data[i][j] == 'S':
                     data[i][j] = 'O'
 
-    def make_n_steps(self, n):
-        for _ in range(n):
-            self.step()
-
-    def step(self):
+    def step(self, num_of_steps):
         data = self.data
         height = len(data)
         width = len(data[0])
@@ -37,17 +32,35 @@ class Garden:
         for i in range(height):
             for j in range(width):
                 if data[i][j] == 'O':
-                    queue.extend([(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)])
                     data[i][j] = '.'
 
-        while queue:
-            x, y = queue.pop(0)
-            if 0 <= x < height and 0 <= y < width:
-                if data[x][y] == '.':
-                    self.data[x][y] = 'O'
+                    x, y = i, j
+                    queue.extend([(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)])
 
-    def result(self):
-        data = self.data
+        in_range = []
+        n = 0
+        while n < num_of_steps:
+            current_queue = queue.copy()
+            queue.clear()
 
-        for line in data:
-            self.answer += line.count('O')
+            for check in current_queue:
+                i, j = check
+                base_i, base_j = i % height, j % width
+
+                if data[base_i][base_j] == '.' and (i, j) not in in_range:
+                    in_range.append((i, j))
+                    queue.extend([(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)])
+
+                    if num_of_steps % 2 == 0:
+                        if (((x + y) % 2 == 0 and (i + j) % 2 == 0) or
+                                ((x + y) % 2 != 0 and (i + j) % 2 != 0)):
+
+                            self.answer += 1
+
+                    else:
+                        if (((x + y) % 2 == 0 and (i + j) % 2 != 0) or
+                                ((x + y) % 2 != 0 and (i + j) % 2 == 0)):
+
+                            self.answer += 1
+
+            n += 1
