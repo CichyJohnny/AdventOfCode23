@@ -44,8 +44,8 @@ class Collisions:
         x = roots[px]
         y = roots[py]
 
-        minimum = 200000000000000
-        maximum = 400000000000000
+        minimum = 7
+        maximum = 27
         if minimum <= x <= maximum and minimum <= y <= maximum:
             if ((x - x_0) * x_v_0 >= 0 and
                 (x - x_1) * x_v_1 >= 0 and
