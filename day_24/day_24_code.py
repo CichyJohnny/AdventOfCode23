@@ -1,3 +1,6 @@
+import sympy
+
+
 class Collisions:
     def __init__(self, input):
         self.input = open(input, 'r')
@@ -28,25 +31,25 @@ class Collisions:
                 self.equations(first, second)
 
     def equations(self, first, second):
-        x_0, y_0, z_0, x_velocity_0, y_velocity_0, z_velocity_0 = first
-        x_1, y_1, z_1, x_velocity_1, y_velocity_1, z_velocity_1 = second
+        x_0, y_0, z_0, x_v_0, y_v_0, z_v_0 = first
+        x_1, y_1, z_1, x_v_1, y_v_1, z_v_1 = second
 
-        a0, a1 = y_velocity_0, y_velocity_1
-        b0, b1 = -x_velocity_0, -x_velocity_1
-        c0, c1 = (y_velocity_0 * x_0 - x_velocity_0 * y_0), (y_velocity_1 * x_1 - x_velocity_1 * y_1)
+        px, py = sympy.symbols('px py')
+        roots = sympy.solve([y_v_0 * (px - x_0) - x_v_0 * (py - y_0),
+                             y_v_1 * (px - x_1) - x_v_1 * (py - y_1)])
 
-        if a0 * b1 == a1 * b0:
+        if not roots:
             return
 
-        xx = (c0 * b1 - c1 * b0) / (a0 * b1 - a1 * b0)
-        yy = (c1 * a0 - c0 * a1) / (a0 * b1 - a1 * b0)
+        x = roots[px]
+        y = roots[py]
 
-        minimum = 200000000000000
-        maximum = 400000000000000
-        if minimum <= xx <= maximum and minimum <= yy <= maximum:
-            if ((xx - x_0) * x_velocity_0 >= 0 and
-                (xx - x_1) * x_velocity_1 >= 0 and
-                (yy - y_0) * y_velocity_0 >= 0 and
-                    (yy - y_1) * y_velocity_1 >= 0):
+        minimum = 7
+        maximum = 27
+        if minimum <= x <= maximum and minimum <= y <= maximum:
+            if ((x - x_0) * x_v_0 >= 0 and
+                (x - x_1) * x_v_1 >= 0 and
+                (y - y_0) * y_v_0 >= 0 and
+                    (y - y_1) * y_v_1 >= 0):
 
                 self.answer += 1
