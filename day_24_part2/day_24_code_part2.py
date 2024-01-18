@@ -22,34 +22,26 @@ class Collisions:
 
     def trajectory(self):
         data = self.data
+        eq = []
 
         for i in range(len(data)):
-            for j in range(i + 1, len(data)):
-                first = data[i]
-                second = data[j]
 
-                self.equations(first, second)
+            x_0, y_0, z_0, x_v_0, y_v_0, z_v_0 = data[i]
+            x_r, y_r, z_r, x_v_r, y_v_r, z_v_r = sympy.symbols('x_r y_r z_r x_v_r y_v_r z_v_r')
 
-    def equations(self, first, second):
-        x_0, y_0, z_0, x_v_0, y_v_0, z_v_0 = first
-        x_1, y_1, z_1, x_v_1, y_v_1, z_v_1 = second
+            eq.extend([
+                (x_r - x_0) * (y_v_0 - y_v_r) - (y_r - y_0) * (x_v_0 - x_v_r),
+                (y_r - y_0) * (z_v_0 - z_v_r) - (z_r - z_0) * (y_v_0 - y_v_r)
+            ])
 
-        px, py = sympy.symbols('px py')
-        roots = sympy.solve([y_v_0 * (px - x_0) - x_v_0 * (py - y_0),
-                             y_v_1 * (px - x_1) - x_v_1 * (py - y_1)])
+            if i < 2:
+                continue
 
-        if not roots:
-            return
+            answers = [sol for sol in sympy.solve(eq) if all(x % 1 == 0 for x in sol.values())]
 
-        x = roots[px]
-        y = roots[py]
+            if len(answers) == 1:
+                break
 
-        minimum = 7
-        maximum = 27
-        if minimum <= x <= maximum and minimum <= y <= maximum:
-            if ((x - x_0) * x_v_0 >= 0 and
-                (x - x_1) * x_v_1 >= 0 and
-                (y - y_0) * y_v_0 >= 0 and
-                    (y - y_1) * y_v_1 >= 0):
+        x, vx, y, vy, z, vz = answers[0].values()
 
-                self.answer += 1
+        self.answer = x + y + z
