@@ -6,5 +6,3 @@ input = 'day_25_input.txt'
 answer = GraphSeparation(input).start()
 
 print(answer)
-
-# The method is much slower because of sympy library, but I like the simplicity it adds
